@@ -23,35 +23,11 @@ namespace Duelist
             escortL = null;
             escortR = null;
 
-            for (int i = 0; i < att.minions.Count(); i++)
-            {
-                if (att.minions[i] != null)
-                {
-                    attStartingHP -= att.minions[i].hp;
-                    attStartingHP -= att.minions[i].defence;
-                }
+            att.defence = getDefenceLimited(att);
+            def.defence = getDefenceLimited(def);
 
-                if (def.minions[i] != null)
-                {
-                    defStartingHP -= def.minions[i].hp;
-                    defStartingHP -= att.minions[i].defence;
-                }
-
-                getGraphical().minionsAttFore[i].sprite = att.map.world.textureStore.clear;
-                getGraphical().minionsAttBack[i].sprite = att.map.world.textureStore.clear;
-                getGraphical().minionsDefFore[i].sprite = def.map.world.textureStore.clear;
-                getGraphical().minionsDefBack[i].sprite = def.map.world.textureStore.clear;
-            }
-
-            if (att.minions.Any(m => m != null) || def.minions.Any(m => m != null))
-            {
-                getGraphical().addMsg("Minions may not participate in a duel", Color.red);
-
-                getGraphical().attMoveUp.enabled = false;
-                getGraphical().attMoveDown.enabled = false;
-                getGraphical().defMoveUp.enabled = false;
-                getGraphical().defMoveDown.enabled = false;
-            }
+            attStartingHP = att.hp + att.defence;
+            defStartingHP = def.hp + def.defence;
         }
 
         public bool stepAlt(PopupBattleAgent popup)
@@ -76,9 +52,26 @@ namespace Duelist
             if (att.isDead)
             {
                 World.log("Agent Comat " + att.getName() + " is dead. Combat ends");
-                outcome = BattleAgents.OUTCOME_DEATH_ATT;
+                outcome = OUTCOME_DEATH_ATT;
                 return true;
             }
+
+            if (def.isDead)
+            {
+                World.log("Agent Comat " + def.getName() + " is dead. Combat ends");
+                outcome = OUTCOME_DEATH_DEF;
+                return true;
+            }
+
+            if (state == 0 && round > 0)
+            {
+                if (checkAIRetreat(popup))
+                {
+                    return true;
+                }
+            }
+
+            return skirmish && round == 2;
         }
 
         public int getAttackStatLimited(UA ua)
@@ -86,7 +79,18 @@ namespace Duelist
             int result = ua.person.stat_might + (ua.person.level / 2);
             foreach (Trait trait in ua.person.traits)
             {
-                trait.getAttackChange();
+                result += trait.getAttackChange();
+            }
+
+            return Math.Max(0, result);
+        }
+
+        public int getDefenceLimited(UA ua)
+        {
+            int result = ua.innerDefence;
+            foreach (Trait trait in ua.person.traits)
+            {
+                result += trait.getDefenceChange();
             }
 
             return Math.Max(0, result);
@@ -117,12 +121,50 @@ namespace Duelist
             }
         }
 
-        public void bStep()
+        public new void automatic()
         {
-            getGraphical().minionsAttFore[i].sprite = att.map.world.textureStore.clear;
-            getGraphical().minionsAttBack[i].sprite = att.map.world.textureStore.clear;
-            getGraphical().minionsDefFore[i].sprite = def.map.world.textureStore.clear;
-            getGraphical().minionsDefBack[i].sprite = def.map.world.textureStore.clear;
+            for (int i = 0; i < 128; i++)
+            {
+                if (stepAlt(null))
+                {
+                    break;
+                }
+            }
+
+            if (skirmish && round == 2)
+            {
+                skirmishEnd();
+                return;
+            }
+
+            if (att.isDead)
+            {
+                victory(def, att);
+            }
+            else if (def.isDead)
+            {
+                victory(att, def);
+            }
+            else
+            {
+                terminate();
+            }
+        }
+
+        public void populatePopup(PopupBattleAgent popupBattle)
+        {
+            for (int i = 0; i < att.minions.Count(); i++)
+            {
+                popupBattle.attMinionNames[i].text = "";
+                popupBattle.attMinionStats[i].text = "";
+                popupBattle.minionsAttFore[i].sprite = att.map.world.textureStore.clear;
+                popupBattle.minionsAttBack[i].sprite = att.map.world.textureStore.clear;
+
+                popupBattle.defMinionNames[i].text = "";
+                popupBattle.defMinionStats[i].text = "";
+                popupBattle.minionsDefFore[i].sprite = def.map.world.textureStore.clear;
+                popupBattle.minionsDefBack[i].sprite = def.map.world.textureStore.clear;
+            }
         }
     }
 }

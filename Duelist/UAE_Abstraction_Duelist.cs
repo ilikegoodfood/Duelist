@@ -11,25 +11,24 @@ namespace Duelist
     public class UAE_Abstraction_Duelist : UAE_Abstraction
     {
         public UAE_Abstraction_Duelist(Map map)
-            : base(map, 0)
+            : base(map, -1)
         {
-            code = 0;
             this.map = map;
         }
 
         public override string getName()
         {
-            return "Duelist";
+            return "A Duelist";
         }
 
         public override string getDesc()
         {
-            return "The Duelist is one of many cocky young nobles with a penchant for theatrics and violence, easily swayed with the promise of power and wealth. The Duelist has high stats in might and intrigue.";
+            return "The Duelist is one of many cocky young nobles with a penchant for theatrics and violence, easily swayed with the promise of power and wealth. A Duelist has high stats in might and intrigue. A Duelist can also challenge heroes to duels from their home locations, which triggers combat that excludes items and minions.";
         }
 
         public override string getFlavour()
         {
-            return "Beauty, education, and wealth. A fine combination of traits for a young noble to possess. Ambition, arrogance, and pride. Ones that amke them so easy to manipulate. All it takes is a promise. Keeping that promise barely matters at all.";
+            return "Beauty, education, and wealth. A fine combination of traits for a young noble to possess. Ambition, arrogance, and pride. Ones that make them so easy to manipulate. All it takes is a promise. Keeping that promise barely matters at all.";
         }
 
         public override string getRestrictions()
@@ -44,12 +43,7 @@ namespace Duelist
 
         public override Sprite getForeground()
         {
-            return map.world.textureStore.agent_courtier;
-        }
-
-        public override Sprite getBoxImg()
-        {
-            return getForeground();
+            return EventManager.getImg("Duelist.duelist_human.png");
         }
 
         public override int getStatMight()
@@ -132,7 +126,7 @@ namespace Duelist
             {
                 GraphicalMap.selectedUnit = duelist;
                 map.world.prefabStore.popAgentLevelUp(duelist);
-                GraphicalMap.panTo(target.hex.x, target.hex.y, target.hex.z);
+                GraphicalMap.panTo(target.hex);
             }
 
             if (map.overmind.god is God_Tutorial2)

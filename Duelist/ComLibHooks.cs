@@ -15,18 +15,34 @@ namespace Duelist
 
         }
 
+        public override BattleAgents onPlayerStartsPendingAgentBattle(UA agent, UA att, UA def)
+        {
+            Tuple<UA, UA> pair = new Tuple<UA, UA>(att, def);
+            if (ModCore.Get().pendingDuels.Contains(pair))
+            {
+                ModCore.Get().pendingDuels.Remove(pair);
+                return new BattleAgents_Duel(att, def);
+            }
+
+            return null;
+        }
+
         public override void onAgentBattle_Setup(BattleAgents battle)
         {
+            //Console.WriteLine("Duelist: Battle setup hook called");
             if (battle is BattleAgents_Duel duel)
             {
+                //Console.WriteLine("Duelist: Battle is Duel");
                 duel.setup();
             }
         }
 
         public override bool interceptAgentBattleStep(PopupBattleAgent popupBattle, BattleAgents battle, out bool battleOver)
         {
+            //Console.WriteLine("Duelist: Battle intercept step hook called");
             if (battle is BattleAgents_Duel duel)
             {
+                //Console.WriteLine("Duelist: Intercepting duel");
                 battleOver = duel.stepAlt(popupBattle);
                 return true;
             }
@@ -35,11 +51,13 @@ namespace Duelist
             return false;
         }
 
-        public override void onPopupBattleAgent_Step(PopupBattleAgent popupBattle, BattleAgents battle)
+        public override void onPopupBattleAgent_Populate(PopupBattleAgent popupBattle, BattleAgents battle)
         {
+            //Console.WriteLine("Duelist: Popup Battle populate hook called");
             if (battle is BattleAgents_Duel duel)
             {
-                duel.bStep();
+                //Console.WriteLine("Duelist: Battle is Duel");
+                duel.populatePopup(popupBattle);
             }
         }
     }

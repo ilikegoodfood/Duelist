@@ -63,7 +63,7 @@ namespace Duelist
         {
             return new List<Trait>
             { 
-
+                new T_Famous()
             };
         }
 
@@ -74,7 +74,17 @@ namespace Duelist
 
         public override Sprite getPortraitForeground()
         {
-            return map.world.textureStore.agent_courtier;
+            if (person.species == map.species_elf)
+            {
+                return EventManager.getImg("Duelist.duelist_elf.png");
+            }
+
+            if (person.species == map.species_dwarf)
+            {
+                return EventManager.getImg("Duelist.duelist_dwarf.png");
+            }
+
+            return EventManager.getImg("Duelist.duelist_human.png"); ;
         }
     }
 }

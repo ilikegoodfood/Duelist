@@ -47,6 +47,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>..\..\..\Game DLLs\2_0\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\Game DLLs\2_0\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -64,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task_AttendDuel.cs" />
     <Compile Include="T_Famous.cs" />
+    <Compile Include="T_HonourableDuel.cs" />
     <Compile Include="UAE_Abstraction_Duelist.cs" />
     <Compile Include="UAE_Duelist.cs" />
   </ItemGroup>

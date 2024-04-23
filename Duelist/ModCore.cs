@@ -72,6 +72,7 @@ namespace Duelist
                     comLib = core;
 
                     comLib.RegisterHooks(new ComLibHooks(map));
+                    break;
                 }
             }
         }

@@ -32,21 +32,17 @@ namespace Duelist
 
         public bool stepAlt(PopupBattleAgent popup)
         {
-            switch(state)
+            if (state == 0)
             {
-                case 0:
-                    attack(getAttackStatLimited(att), att, def, popup);
-                    state++;
-                    break;
-                case 1:
-                    attack(getAttackStatLimited(def), def, att, popup);
-                    state++;
-                    break;
-                default:
-                    state = 0;
-                    round++;
-                    popup?.addMsg("Round " + round, new Color(0f, 0.7f, 1f));
-                    break;
+                attack(getAttackStatLimited(att), att, def, popup);
+                state++;
+            }
+            else if (state == 1)
+            {
+                attack(getAttackStatLimited(def), def, att, popup);
+                state = 0;
+                round++;
+                popup?.addMsg("Round " + round, new Color(0f, 0.7f, 1f));
             }
 
             if (att.isDead)
@@ -153,6 +149,8 @@ namespace Duelist
 
         public void populatePopup(PopupBattleAgent popupBattle)
         {
+            popupBattle.title.text = att.getName() + " dueling " + def.getName();
+
             for (int i = 0; i < att.minions.Count(); i++)
             {
                 popupBattle.attMinionNames[i].text = "";

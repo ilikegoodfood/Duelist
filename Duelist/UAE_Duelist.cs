@@ -63,7 +63,8 @@ namespace Duelist
         {
             return new List<Trait>
             { 
-                new T_Famous()
+                new T_Famous(),
+                new T_HonourableDuel()
             };
         }
 

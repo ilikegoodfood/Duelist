@@ -15,7 +15,7 @@ namespace Duelist
 
         }
 
-        public override BattleAgents onPlayerStartsPendingAgentBattle(UA agent, UA att, UA def)
+        public override BattleAgents onAgentBattleStarts(UA att, UA def)
         {
             Tuple<UA, UA> pair = new Tuple<UA, UA>(att, def);
             if (ModCore.Get().pendingDuels.Contains(pair))
@@ -24,7 +24,28 @@ namespace Duelist
                 return new BattleAgents_Duel(att, def);
             }
 
+            if (def.person != null)
+            {
+                T_HonourableDuel duel = (T_HonourableDuel)def.person.traits.FirstOrDefault(t => t is T_HonourableDuel);
+                if (duel != null && duel.cooldown <= 0)
+                {
+                    duel.use();
+                    return new BattleAgents_Duel(att, def);
+                }
+            }
+
             return null;
+        }
+
+        public override bool interceptAgentBattleAutomatic(BattleAgents battle)
+        {
+            if (battle is BattleAgents_Duel duel)
+            {
+                duel.automatic();
+                return true;
+            }
+
+            return false;
         }
 
         public override void onAgentBattle_Setup(BattleAgents battle)

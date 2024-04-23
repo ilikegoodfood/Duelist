@@ -23,7 +23,7 @@ namespace Duelist
 
         public override string getDesc()
         {
-            return "Through a call to honour and a silver tongue, the duelist si able to convince would be asailants to settle their differences over a duel, rather than all out combat." + (cooldown > 0? " (disabled for " + cooldown + " turns)" : "");
+            return "Through a call to honour and a silver tongue, the duelist is able to convince would be asailants to settle their differences over a duel, rather than all out combat." + (cooldown > 0? " (disabled for " + cooldown + " turns)" : "");
         }
 
         public override void turnTick(Person p)

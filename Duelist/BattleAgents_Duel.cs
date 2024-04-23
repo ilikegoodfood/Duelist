@@ -151,6 +151,49 @@ namespace Duelist
         {
             popupBattle.title.text = att.getName() + " dueling " + def.getName();
 
+            if (state == 0)
+            {
+                if (!def.isDead && !att.isDead && outcome == OUTCOME_UNRESOLVED)
+                {
+                    if (def.isCommandable())
+                    {
+                        if (round == 1)
+                        {
+                            popupBattle.retreatButtonRightText.text = "Surrender";
+                            popupBattle.retreatDescRightText.text = "Unable to surrender on round 1";
+                        }
+                        else if (round == 2)
+                        {
+                            popupBattle.retreatButtonRightText.text = "Coward's Surrender";
+                            popupBattle.retreatDescRightText.text = "If you surrender now, your minions will abandon you.";
+                        }
+                        else
+                        {
+                            popupBattle.retreatButtonRightText.text = "Surrender";
+                            popupBattle.retreatDescRightText.text = "Noone will judge you ill for surrendering at this time.";
+                        }
+                    }
+                    else if (att.isCommandable())
+                    {
+                        if (round == 1)
+                        {
+                            popupBattle.retreatButtonLeftText.text = "Surrender";
+                            popupBattle.retreatDescLeftText.text = "Unable to surrender on round 1";
+                        }
+                        else if (round == 2)
+                        {
+                            popupBattle.retreatButtonLeftText.text = "Coward's Surrender";
+                            popupBattle.retreatDescLeftText.text = "If you surrender now, your minions will abandon you.";
+                        }
+                        else
+                        {
+                            popupBattle.retreatButtonLeftText.text = "Surrender";
+                            popupBattle.retreatDescLeftText.text = "Noone will judge you ill for surrendering at this time.";
+                        }
+                    }
+                }
+            }
+
             for (int i = 0; i < att.minions.Count(); i++)
             {
                 popupBattle.attMinionNames[i].text = "";

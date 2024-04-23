@@ -137,5 +137,67 @@ namespace Duelist
                 }
             }
         }
+
+        public override string interceptCombatOutcomeEvent(string currentlyChosenEvent, UA victor, UA defeated, BattleAgents battleAgents)
+        {
+            if (battleAgents is BattleAgents_Duel duel)
+            {
+                if (defeated.isDead)
+                {
+                    if (victor.isCommandable())
+                    {
+                        if (victor == duel.att)
+                        {
+                            return "duelist.duelVictoryAttackingLethal";
+                        }
+                        else
+                        {
+                            return "duelist.duelVictoryDefendingLethal";
+                        }
+                    }
+                    else if (defeated.isCommandable())
+                    {
+                        if (defeated == duel.att)
+                        {
+                            return "duelist.duelDefeatAttackingLethal";
+                        }
+                        else
+                        {
+                            return "duelist.duelDefeatDefendingLethal";
+                        }
+                    }
+                }
+                else
+                {
+                    if (victor.isCommandable())
+                    {
+                        if (victor == duel.att)
+                        {
+                            return "duelist.duelVictoryAttackingRetreat";
+                        }
+                        else
+                        {
+                            return "duelist.duelVictoryDefendingRetreat";
+                        }
+                    }
+                    else if (defeated.isCommandable())
+                    {
+                        if (defeated == duel.att)
+                        {
+                            return "duelist.duelDefeatAttackingRetreat";
+                        }
+                        else
+                        {
+                            return "duelist.duelDefeatDefendingRetreat";
+                        }
+                    }
+
+                    defeated.map.adjacentMoveTo(defeated, victor.location);
+                    World.log(defeated.getName() + " does not retreat when surrendering a duel. Returning them to " + victor.location.getName(true));
+                }
+            }
+
+            return currentlyChosenEvent;
+        }
     }
 }

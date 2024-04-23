@@ -18,7 +18,7 @@ namespace Duelist
 
         public override string getName()
         {
-            return "Honourable Duelist";
+            return "Honourable Duelist" + (cooldown > 0? " (disabled " + cooldown + ")" : "");
         }
 
         public override string getDesc()

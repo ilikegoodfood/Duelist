@@ -164,7 +164,7 @@ namespace Duelist
                         }
                         else if (round == 2)
                         {
-                            popupBattle.retreatButtonRightText.text = "Coward's Surrender";
+                            popupBattle.retreatButtonRightText.text = "Surrender";
                             popupBattle.retreatDescRightText.text = "If you surrender now, your minions will abandon you.";
                         }
                         else
@@ -182,7 +182,7 @@ namespace Duelist
                         }
                         else if (round == 2)
                         {
-                            popupBattle.retreatButtonLeftText.text = "Coward's Surrender";
+                            popupBattle.retreatButtonLeftText.text = "Surrender";
                             popupBattle.retreatDescLeftText.text = "If you surrender now, your minions will abandon you.";
                         }
                         else

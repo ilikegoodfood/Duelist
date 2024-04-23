@@ -46,7 +46,7 @@ namespace Duelist
                 return person.overrideName;
             }
 
-            return "Duelist";
+            return "Duelist " + person.firstName;
         }
 
         public override bool isCommandable()

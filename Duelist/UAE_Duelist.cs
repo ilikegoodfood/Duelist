@@ -17,10 +17,6 @@ namespace Duelist
             {
                 person.species = map.species_elf;
             }
-            else if (sg is Soc_Dwarves)
-            {
-                person.species = map.species_dwarf;
-            }
 
             person.stat_might = 4;
             person.stat_lore = 2;
@@ -78,11 +74,6 @@ namespace Duelist
             if (person.species == map.species_elf)
             {
                 return EventManager.getImg("Duelist.duelist_elf.png");
-            }
-
-            if (person.species == map.species_dwarf)
-            {
-                return EventManager.getImg("Duelist.duelist_dwarf.png");
             }
 
             return EventManager.getImg("Duelist.duelist_human.png"); ;

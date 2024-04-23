@@ -78,7 +78,7 @@ namespace Duelist
                 return false;
             }
 
-            return loc.settlement is Set_City || loc.settlement is Set_DwarvenCity || loc.settlement is Set_ElvenCity;
+            return loc.settlement is Set_City || loc.settlement is Set_ElvenCity;
         }
 
         public override void createAgent(Location target)

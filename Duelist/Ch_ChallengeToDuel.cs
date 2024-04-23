@@ -60,7 +60,7 @@ namespace Duelist
 
         public override bool valid()
         {
-            return !target.isDead && !target.isCommandable() && !(target.task is Task_AttackUnit) && target != target.map.awarenessManager.chosenOne && location.settlement is SettlementHuman && location.settlement.infiltration > 0.0 && target.engagedBy == null && target.engaging == null;
+            return !target.isDead && !target.isCommandable() && !(target.task is Task_AttackUnit) && !(target.task is Task_AttackUnitWithEscort) && target != target.map.awarenessManager.chosenOne && location.settlement is SettlementHuman && location.settlement.infiltration > 0.0 && target.engagedBy == null && target.engaging == null;
         }
 
         public override bool validFor(UA ua)

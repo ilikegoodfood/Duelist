@@ -53,7 +53,7 @@ namespace Duelist
 
         public override int getStatLore()
         {
-            return 2;
+            return 1;
         }
 
         public override int getStatIntrigue()

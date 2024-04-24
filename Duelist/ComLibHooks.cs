@@ -81,5 +81,13 @@ namespace Duelist
                 duel.populatePopup(popupBattle);
             }
         }
+
+        public override void onAgentAI_EndOfProcess(UA ua, CommunityLib.AgentAI.AIData aiData, List<CommunityLib.AgentAI.ChallengeData> validChallengeData, List<CommunityLib.AgentAI.TaskData> validTaskData, List<Unit> visibleUnits)
+        {
+            if (ua.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
+            {
+                duel.onBegin(ua);
+            }
+        }
     }
 }

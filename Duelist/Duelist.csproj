@@ -66,7 +66,9 @@
     <Compile Include="ComLibHooks.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rt_ChampionDuel.cs" />
     <Compile Include="Task_AttendDuel.cs" />
+    <Compile Include="T_Champion.cs" />
     <Compile Include="T_Famous.cs" />
     <Compile Include="T_HonourableDuel.cs" />
     <Compile Include="UAE_Abstraction_Duelist.cs" />

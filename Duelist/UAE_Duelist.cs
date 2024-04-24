@@ -19,12 +19,13 @@ namespace Duelist
             }
 
             person.stat_might = 4;
-            person.stat_lore = 2;
+            person.stat_lore = 1;
             person.stat_intrigue = 3;
             person.stat_command = 1;
             person.isMale = true;
             person.age = 21;
             person.hasSoul = true;
+            person.gold = 0;
             person.embedIntoSociety();
 
             corrupted = true;
@@ -60,7 +61,8 @@ namespace Duelist
             return new List<Trait>
             { 
                 new T_Famous(),
-                new T_HonourableDuel()
+                new T_HonourableDuel(),
+                new T_Champion(),
             };
         }
 

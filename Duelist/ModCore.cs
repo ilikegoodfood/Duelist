@@ -18,6 +18,8 @@ namespace Duelist
 
         public List<Tuple<UA, UA>> pendingDuels;
 
+        public List<T_Champion> champions;
+
         public static ModCore Get() => modCore;
 
         public static CommunityLib.ModCore GetComLib() => comLib;
@@ -136,6 +138,39 @@ namespace Duelist
                     duelChallenges.Remove(key);
                 }
             }
+
+            foreach(T_Champion champion in Get().champions.ToList())
+            {
+                if (champion.person == null)
+                {
+                    Get().champions.Remove(champion);
+                    continue;
+                }
+
+                if (!champion.person.isDead)
+                {
+                    champion.populateDuels();
+                }
+            }
+        }
+
+        public override void onPersonRecycled(Person person)
+        {
+            foreach (T_Champion champion in Get().champions.ToList())
+            {
+                if (champion.person == null || champion.person == person)
+                {
+                    Get().champions.Remove(champion);
+                }
+            }
+        }
+
+        public override void onAgentAIDecision(UA uA)
+        {
+            if (uA.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
+            {
+                duel.onBegin(uA);
+            }
         }
 
         public override string interceptCombatOutcomeEvent(string currentlyChosenEvent, UA victor, UA defeated, BattleAgents battleAgents)
@@ -198,6 +233,23 @@ namespace Duelist
             }
 
             return currentlyChosenEvent;
+        }
+
+        public override void onAgentBattleTerminate(BattleAgents battleAgents)
+        {
+            if (battleAgents is BattleAgents_Duel duel)
+            {
+                if (duel.outcome == BattleAgents.OUTCOME_RETREAT_ATT && !duel.att.isDead)
+                {
+                    duel.att.map.adjacentMoveTo(duel.att, duel.def.location);
+                    World.log(duel.att.getName() + " does not retreat when surrendering a duel. Returning them to " + duel.def.location.getName(true));
+                }
+                else if (duel.outcome == BattleAgents.OUTCOME_RETREAT_DEF && !duel.def.isDead)
+                {
+                    duel.att.map.adjacentMoveTo(duel.def, duel.att.location);
+                    World.log(duel.def.getName() + " does not retreat when surrendering a duel. Returning them to " + duel.att.location.getName(true));
+                }
+            }
         }
     }
 }

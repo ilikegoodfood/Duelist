@@ -94,7 +94,7 @@ namespace Duelist
 
         public override int getCompletionProfile()
         {
-            return (map.param.ua_profileFromAttacking * 2) / 3;
+            return map.param.ua_profileFromAttacking * 2 / 3;
         }
 
         public override int getCompletionMenace()
@@ -116,10 +116,10 @@ namespace Duelist
             if (target?.person != null)
             {
                 return new int[]
-            {
-                Tags.COOPERATION,
-                target.personID + 10000
-            };
+                {
+                    Tags.COOPERATION,
+                    target.personID + 10000
+                };
             }
 
             return new int[]

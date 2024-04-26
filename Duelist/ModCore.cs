@@ -32,6 +32,7 @@ namespace Duelist
 
             Get().duelChallenges = new Dictionary<UA, Ch_ChallengeToDuel>();
             Get().pendingDuels = new List<Tuple<UA, UA>>();
+            Get().champions = new List<T_Champion>();
         }
 
         public override void afterLoading(Map map)
@@ -45,6 +46,11 @@ namespace Duelist
             if (Get().pendingDuels == null)
             {
                 Get().pendingDuels = new List<Tuple<UA, UA>>();
+            }
+
+            if (Get().champions == null)
+            {
+                Get().champions = new List<T_Champion>();
             }
 
             foreach (Location location in map.locations)

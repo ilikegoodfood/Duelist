@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Game DLLs\1_1\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -64,6 +67,7 @@
     <Compile Include="BattleAgents_Duel.cs" />
     <Compile Include="Ch_ChallengeToDuel.cs" />
     <Compile Include="ComLibHooks.cs" />
+    <Compile Include="HarmonyPatches.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rt_ChampionDuel.cs" />
@@ -73,6 +77,9 @@
     <Compile Include="T_HonourableDuel.cs" />
     <Compile Include="UAE_Abstraction_Duelist.cs" />
     <Compile Include="UAE_Duelist.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

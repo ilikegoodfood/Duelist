@@ -100,6 +100,10 @@ namespace Duelist
             {
                 duel.onImmediateBegin(ua);
             }
+            else if (ua.task is Task_GoToPerformChallenge tGoChallenge && tGoChallenge.challenge is Rt_ChampionDuel duel2)
+            {
+                duel2.onImmediateBegin(ua);
+            }
         }
     }
 }

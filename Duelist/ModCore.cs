@@ -24,6 +24,11 @@ namespace Duelist
 
         public static CommunityLib.ModCore GetComLib() => comLib;
 
+        public override void onModsInitiallyLoaded()
+        {
+            HarmonyPatches.PatchingInit();
+        }
+
         public override void beforeMapGen(Map map)
         {
             modCore = this;
@@ -166,11 +171,15 @@ namespace Duelist
             }
         }
 
-        public override void onAgentAIDecision(UA uA)
+        public override void onAgentAIDecision(UA ua)
         {
-            if (uA.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
+            if (ua.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
             {
-                duel.onImmediateBegin(uA);
+                duel.onImmediateBegin(ua);
+            }
+            else if (ua.task is Task_GoToPerformChallenge tGoChallenge && tGoChallenge.challenge is Rt_ChampionDuel duel2)
+            {
+                duel2.onImmediateBegin(ua);
             }
         }
 
@@ -227,30 +236,10 @@ namespace Duelist
                             return "duelist.duelDefeatDefendingRetreat";
                         }
                     }
-
-                    defeated.map.adjacentMoveTo(defeated, victor.location);
-                    World.log(defeated.getName() + " does not retreat when surrendering a duel. Returning them to " + victor.location.getName(true));
                 }
             }
 
             return currentlyChosenEvent;
-        }
-
-        public override void onAgentBattleTerminate(BattleAgents battleAgents)
-        {
-            if (battleAgents is BattleAgents_Duel duel)
-            {
-                if (duel.outcome == BattleAgents.OUTCOME_RETREAT_ATT && !duel.att.isDead)
-                {
-                    duel.att.map.adjacentMoveTo(duel.att, duel.def.location);
-                    World.log(duel.att.getName() + " does not retreat when surrendering a duel. Returning them to " + duel.def.location.getName(true));
-                }
-                else if (duel.outcome == BattleAgents.OUTCOME_RETREAT_DEF && !duel.def.isDead)
-                {
-                    duel.att.map.adjacentMoveTo(duel.def, duel.att.location);
-                    World.log(duel.def.getName() + " does not retreat when surrendering a duel. Returning them to " + duel.att.location.getName(true));
-                }
-            }
         }
     }
 }

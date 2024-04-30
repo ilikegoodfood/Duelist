@@ -30,41 +30,55 @@ namespace Duelist
 
             ModCore.Get().champions.Add(this);
 
+            //Console.WriteLine("Duelist: Grand Champion Aquired");
             populateDuels();
         }
 
         public override void onMove(Location current, Location dest)
         {
-            populateDuels();
+            //Console.WriteLine("Duelist: Grand Champion moved");
+            populateDuels(dest);
         }
 
         public override void turnTick(Person p)
         {
+            //Console.WriteLine("Duelist: Grand Champion turn ticked");
             populateDuels();
         }
 
-        public void populateDuels()
+        public void populateDuels(Location loc = null)
         {
+            //Console.WriteLine("Duelist: Populating duels");
             if (person.unit != null)
             {
+                if (loc == null)
+                {
+                    loc = person.unit.location;
+                }
+
+                //Console.WriteLine("Duelist: Grand Champion has unit");
                 foreach (Rt_ChampionDuel duel in duels)
                 {
                     person.unit.rituals.Remove(duel);
                 }
                 duels.Clear();
+                //Console.WriteLine("Duelist: Cleaned old duels from Grand Champion");
 
-                foreach (Unit u in person.unit.location.units)
+                foreach (Unit u in loc.units)
                 {
                     if (!(u is UA ua) || u is UAE || ua.isDead || u == person.unit || u.isCommandable())
                     {
+                        //Console.WriteLine("Duelist: Found inval;id unit");
                         continue;
                     }
 
                     if ((ua.task is Task_AttackUnit att && att.target is UA) || (ua.task is Task_AttackUnitWithEscort attEscort && attEscort.target is UA))
                     {
+                        //Console.WriteLine("Duelist: Found valid Unit");
                         Rt_ChampionDuel duel = (Rt_ChampionDuel)person.unit.rituals.FirstOrDefault(rt => rt is Rt_ChampionDuel cd && cd.target == u);
                         if (duel == null)
                         {
+                            //Console.WriteLine("Duelist: Created new duel");
                             duel = new Rt_ChampionDuel(person.unit.location, ua);
                             person.unit.rituals.Add(duel);
                             duels.Add(duel);

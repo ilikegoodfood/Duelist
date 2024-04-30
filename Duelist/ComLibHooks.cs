@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 
 namespace Duelist
 {
@@ -13,6 +14,17 @@ namespace Duelist
             : base(map)
         {
 
+        }
+
+        public override void onMoveTaken(Unit u, Location locA, Location locB)
+        {
+            foreach (T_Champion champion in ModCore.Get().champions)
+            {
+                if (champion.person != null && champion.person.unit != null && champion.person.unit.location == locB)
+                {
+                    champion.populateDuels();
+                }
+            }
         }
 
         public override BattleAgents onAgentBattleStarts(UA att, UA def)
@@ -86,7 +98,7 @@ namespace Duelist
         {
             if (ua.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
             {
-                duel.onBegin(ua);
+                duel.onImmediateBegin(ua);
             }
         }
     }

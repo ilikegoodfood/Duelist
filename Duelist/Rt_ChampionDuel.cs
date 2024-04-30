@@ -243,6 +243,7 @@ namespace Duelist
             }
 
             ua.task = null;
+            target.task = null;
         }
 
         public override double getComplexity()

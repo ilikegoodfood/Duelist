@@ -66,7 +66,7 @@ namespace Duelist
             { 
                 new T_Famous(),
                 new T_HonourableDuel(),
-                new T_Champion(),
+                new T_Champion()
             };
         }
 

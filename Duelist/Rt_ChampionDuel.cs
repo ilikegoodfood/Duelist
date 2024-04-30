@@ -131,113 +131,118 @@ namespace Duelist
             return 1.0;
         }
 
-        public override void onBegin(Unit unit)
+        public override void onImmediateBegin(UA ua)
         {
-            if (unit is UA ua)
-            {
-                ua.addProfile(map.param.ua_profileFromAttacking * 2 / 3);
+            ua.addProfile(map.param.ua_profileFromAttacking * 2 / 3);
 
-                if (ua.isCommandable() || target.isCommandable())
+            UA victim = null;
+            if (target.task is Task_AttackUnit att && att.target is UA victim1)
+            {
+                victim = victim1;
+            }
+            else if (target.task is Task_AttackUnitWithEscort attEscort && attEscort.target is UA victim2)
+            {
+                victim = victim2;
+            }
+
+            string reason = ua.getName() + " is standing in for ";
+            if (victim != null)
+            {
+                reason += victim.getName();
+
+                victim.inner_profile = Math.Max(victim.inner_profileMin, victim.inner_profile - 10);
+                victim.inner_menace = Math.Max(victim.inner_menaceMin, victim.inner_menace - 10);
+
+                if (victim.person != null)
                 {
-                    if (unit.map.automatic)
+                    int combatLikeTernary = 0;
+                    int championLikeTernary = 0;
+
+                    if (victim.person.likes.Contains(Tags.COMBAT) || victim.person.extremeLikes.Contains(Tags.COMBAT))
                     {
-                        BattleAgents_Duel duel = new BattleAgents_Duel(target, ua);
-                        duel.automatic();
+                        combatLikeTernary = 1;
                     }
-                    else
+                    else if (victim.person.hates.Contains(Tags.COMBAT) || victim.person.extremeHates.Contains(Tags.COMBAT))
                     {
-                        target.engaging = unit;
-                        unit.engagedBy = target;
-                        unit.turnLastEngaged = unit.map.turn;
-                        target.turnLastEngaged = unit.map.turn;
-                        ModCore.Get().pendingDuels.Add(new Tuple<UA, UA>(target, ua));
+                        combatLikeTernary = -1;
+                    }
+
+                    if (ua.person != null)
+                    {
+                        if (victim.person.likes.Contains(ua.personID + 10000) || victim.person.extremeLikes.Contains(ua.personID + 10000))
+                        {
+                            championLikeTernary = 1;
+                        }
+                        else if (victim.person.hates.Contains(ua.personID + 10000) || victim.person.extremeHates.Contains(ua.personID + 10000))
+                        {
+                            championLikeTernary = -1;
+                        }
+                    }
+
+                    if (Eleven.random.Next(4) == 0)
+                    {
+                        string msg = victim.getName() + " has heard of your actions on their behalf and ";
+                        if (championLikeTernary > 0)
+                        {
+                            victim.person.increasePreference(ua.personID + 10000);
+                            msg += "appreciates them. Their liking for you has increased.";
+                        }
+                        else if (championLikeTernary < 0)
+                        {
+                            victim.person.decreasePreference(ua.personID + 10000);
+                            msg += "does not appreciate them at all. Their disliking for you has increased.";
+                        }
+                        else if (combatLikeTernary > 0)
+                        {
+                            victim.person.decreasePreference(ua.personID + 10000);
+                            msg += "does not appreciate them at all. They have come to like you less.";
+                        }
+                        else if (combatLikeTernary < 0)
+                        {
+                            victim.person.increasePreference(ua.personID + 10000);
+                            msg += "appreciates them. They have come to like you more.";
+                        }
                     }
                 }
                 else
                 {
-                    UA victim = null;
-                    if (target.task is Task_AttackUnit att && att.target is UA victim1)
-                    {
-                        victim = victim1;
-                    }
-                    else if (target.task is Task_AttackUnitWithEscort attEscort && attEscort.target is UA victim2)
-                    {
-                        victim = victim2;
-                    }
-
-                    string reason = ua.getName() + " is standing in for ";
-                    if (victim != null)
-                    {
-                        reason += victim.getName();
-
-                        victim.inner_profile = Math.Max(victim.inner_profileMin, victim.inner_profile - 10);
-                        victim.inner_menace = Math.Max(victim.inner_menaceMin, victim.inner_menace - 10);
-
-                        if (victim.person != null)
-                        {
-                            int combatLikeTernary = 0;
-                            int championLikeTernary = 0;
-
-                            if (victim.person.likes.Contains(Tags.COMBAT) || victim.person.extremeLikes.Contains(Tags.COMBAT))
-                            {
-                                combatLikeTernary = 1;
-                            }
-                            else if (victim.person.hates.Contains(Tags.COMBAT) || victim.person.extremeHates.Contains(Tags.COMBAT))
-                            {
-                                combatLikeTernary = -1;
-                            }
-
-                            if (ua.person != null)
-                            {
-                                if (victim.person.likes.Contains(ua.personID + 10000) || victim.person.extremeLikes.Contains(ua.personID + 10000))
-                                {
-                                    championLikeTernary = 1;
-                                }
-                                else if (victim.person.hates.Contains(ua.personID + 10000) || victim.person.extremeHates.Contains(ua.personID + 10000))
-                                {
-                                    championLikeTernary = -1;
-                                }
-                            }
-
-                            if (Eleven.random.Next(4) == 0)
-                            {
-                                string msg = victim.getName() + " has heard of your actions on their behalf and ";
-                                if (championLikeTernary > 0)
-                                {
-                                    victim.person.increasePreference(ua.personID + 10000);
-                                    msg += "appreciates them. Their liking for you has increased.";
-                                }
-                                else if (championLikeTernary < 0)
-                                {
-                                    victim.person.decreasePreference(ua.personID + 10000);
-                                    msg += "does not appreciate them at all. Their disliking for you has increased.";
-                                }
-                                else if (combatLikeTernary > 0)
-                                {
-                                    victim.person.decreasePreference(ua.personID + 10000);
-                                    msg += "does not appreciate them at all. They have come to like you less.";
-                                }
-                                else if (combatLikeTernary < 0)
-                                {
-                                    victim.person.increasePreference(ua.personID + 10000);
-                                    msg += "appreciates them. They have come to like you more.";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            reason += "an unknown third party (ERROR)";
-                        }
-
-                        new BattleAgents_Duel(target, ua)
-                        {
-                            attackReason = reason
-                        }.automatic();
-                    }
+                    reason += "an unknown third party (ERROR)";
                 }
             }
 
-            unit.task = null;
+            if (ua.isCommandable() || target.isCommandable())
+            {
+                if (ua.map.automatic)
+                {
+                    BattleAgents_Duel duel = new BattleAgents_Duel(target, ua);
+                    duel.automatic();
+                }
+                else
+                {
+                    target.engaging = ua;
+                    ua.engagedBy = target;
+                    ua.turnLastEngaged = ua.map.turn;
+                    target.turnLastEngaged = ua.map.turn;
+
+                    if (ModCore.GetComLib().data.isPlayerTurn)
+                    {
+                        ua.map.world.prefabStore.popBattle(new BattleAgents_Duel(target, ua));
+                    }
+                    else
+                    {
+                        ModCore.Get().pendingDuels.Add(new Tuple<UA, UA>(target, ua));
+                    }
+                }
+            }
+            else
+            {
+                new BattleAgents_Duel(target, ua)
+                {
+                    attackReason = reason
+                }.automatic();
+            }
+
+            ua.task = null;
         }
 
         public override double getComplexity()
@@ -258,13 +263,16 @@ namespace Duelist
         public override int[] buildPositiveTags()
         {
             UA victim = null;
-            if (target.task is Task_AttackUnit att && att.target is UA victim1)
+            if (target != null)
             {
-                victim = victim1;
-            }
-            else if (target.task is Task_AttackUnitWithEscort attEscort && attEscort.target is UA victim2)
-            {
-                victim = victim2;
+                if (target.task is Task_AttackUnit att && att.target is UA victim1)
+                {
+                    victim = victim1;
+                }
+                else if (target.task is Task_AttackUnitWithEscort attEscort && attEscort.target is UA victim2)
+                {
+                    victim = victim2;
+                }
             }
 
             if (victim != null && victim.person != null)
@@ -274,7 +282,7 @@ namespace Duelist
                     Tags.COMBAT,
                     Tags.CRUEL,
                     Tags.MIGHT,
-                    victim.personID + 10000
+                    victim.person.index + 10000
                 };
             }
 
@@ -288,11 +296,11 @@ namespace Duelist
 
         public override int[] buildNegativeTags()
         {
-            if (target?.person != null)
+            if (target != null && target.person != null)
             {
                 return new int[]
                 {
-                    target.personID + 10000
+                    target.person.index + 10000
                 };
             }
 

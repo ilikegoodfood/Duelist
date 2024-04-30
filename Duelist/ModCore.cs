@@ -145,28 +145,23 @@ namespace Duelist
                 }
             }
 
-            foreach(T_Champion champion in Get().champions.ToList())
+            foreach (T_Champion champion in champions.ToList())
             {
-                if (champion.person == null)
+                if (champion.person == null || !champion.person.traits.Contains(champion))
                 {
-                    Get().champions.Remove(champion);
-                    continue;
-                }
-
-                if (!champion.person.isDead)
-                {
-                    champion.populateDuels();
+                    champions.Remove(champion);
                 }
             }
         }
 
         public override void onPersonRecycled(Person person)
         {
-            foreach (T_Champion champion in Get().champions.ToList())
+            foreach (T_Champion champion in champions.ToList())
             {
-                if (champion.person == null || champion.person == person)
+                if (champion.person == person)
                 {
-                    Get().champions.Remove(champion);
+                    champions.Remove(champion);
+                    break;
                 }
             }
         }
@@ -175,7 +170,7 @@ namespace Duelist
         {
             if (uA.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
             {
-                duel.onBegin(uA);
+                duel.onImmediateBegin(uA);
             }
         }
 

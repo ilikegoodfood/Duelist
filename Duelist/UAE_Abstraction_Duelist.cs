@@ -104,6 +104,19 @@ namespace Duelist
                 duelist = new UAE_Duelist(target, map.soc_dark);
             }
 
+            if (target.settlement is Set_ElvenCity)
+            {
+                duelist.person.species = map.species_elf;
+            }
+            else if (target.settlement is Set_DwarvenCity)
+            {
+                duelist.person.species = map.species_dwarf;
+            }
+            else
+            {
+                duelist.person.species = map.species_human;
+            }
+
             duelist.person.stat_might = getStatMight();
             duelist.person.stat_lore = getStatLore();
             duelist.person.stat_intrigue = getStatIntrigue();

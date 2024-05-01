@@ -20,6 +20,8 @@ namespace Duelist
 
         public List<T_Champion> champions;
 
+        public static bool opt_brightPortraits = false;
+
         public static ModCore Get() => modCore;
 
         public static CommunityLib.ModCore GetComLib() => comLib;
@@ -27,6 +29,14 @@ namespace Duelist
         public override void onModsInitiallyLoaded()
         {
             HarmonyPatches.PatchingInit();
+        }
+
+        public override void receiveModConfigOpts_bool(string optName, bool value)
+        {
+            if (optName == "Bright Portraits")
+            {
+                opt_brightPortraits = value;
+            }
         }
 
         public override void beforeMapGen(Map map)

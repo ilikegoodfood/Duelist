@@ -43,7 +43,12 @@ namespace Duelist
 
         public override Sprite getForeground()
         {
-            return EventManager.getImg("Duelist.duelist_human.png");
+            if(ModCore.opt_brightPortraits)
+            {
+                return EventManager.getImg("Duelist.duelist_human.png");
+            }
+
+            return EventManager.getImg("Duelist.duelist_dimmed_human.png");
         }
 
         public override int getStatMight()

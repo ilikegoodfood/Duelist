@@ -75,20 +75,30 @@ namespace Duelist
         {
             if (person.species == map.species_elf)
             {
-                if (ModCore.opt_brightPortraits)
+                if (ModCore.opt_oldBrightPortraits)
                 {
-                    return EventManager.getImg("Duelist.duelist_elf.png");
+                    return EventManager.getImg("Duelist.duelist_oldbright_elf.png");
                 }
 
-                return EventManager.getImg("Duelist.duelist_dimmed_elf.png");
+                if (ModCore.opt_oldPortraits)
+                {
+                    return EventManager.getImg("Duelist.duelist_old_elf.png");
+                }
+
+                return EventManager.getImg("Duelist.duelist_elf.png");
             }
 
-            if (ModCore.opt_brightPortraits)
+            if (ModCore.opt_oldBrightPortraits)
             {
-                return EventManager.getImg("Duelist.duelist_human.png");
+                return EventManager.getImg("Duelist.duelist_oldbright_human.png");
             }
 
-            return EventManager.getImg("Duelist.duelist_dimmed_human.png"); ;
+            if (ModCore.opt_oldPortraits)
+            {
+                return EventManager.getImg("Duelist.duelist_old_human.png");
+            }
+
+            return EventManager.getImg("Duelist.duelist_human.png"); ;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Duelist
 {
@@ -20,7 +21,9 @@ namespace Duelist
 
         public List<T_Champion> champions;
 
-        public static bool opt_brightPortraits = false;
+        public static bool opt_oldPortraits = false;
+
+        public static bool opt_oldBrightPortraits = false;
 
         public static ModCore Get() => modCore;
 
@@ -33,9 +36,13 @@ namespace Duelist
 
         public override void receiveModConfigOpts_bool(string optName, bool value)
         {
-            if (optName == "Bright Portraits")
+            if (optName == "Old Bright Portraits")
             {
-                opt_brightPortraits = value;
+                opt_oldBrightPortraits = value;
+            }
+            else if (optName == "Old Portraits")
+            {
+                opt_oldPortraits = value;
             }
         }
 

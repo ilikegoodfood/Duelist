@@ -86,7 +86,7 @@ namespace Duelist
 
                 if (ModCore.opt_oldPortraits)
                 {
-                    return EventManager.getImg("Duelist.duelist_oldt_elf.png");
+                    return EventManager.getImg("Duelist.duelist_old_elf.png");
                 }
 
                 return EventManager.getImg("Duelist.duelist_elf.png");

@@ -13,13 +13,17 @@ namespace Duelist
         public UAE_Duelist(Location loc, Society sg)
             : base(loc, sg)
         {
-            if (sg is Soc_Elven)
+            if (loc.settlement is Set_ElvenCity)
             {
                 person.species = map.species_elf;
             }
-            else if (sg is Soc_Dwarves)
+            else if (loc.settlement is Set_DwarvenCity)
             {
                 person.species = map.species_dwarf;
+            }
+            else
+            {
+                person.species = map.species_human;
             }
 
             person.stat_might = 4;

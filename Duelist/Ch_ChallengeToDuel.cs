@@ -99,7 +99,7 @@ namespace Duelist
 
         public override int getCompletionMenace()
         {
-            return map.param.ua_menaceFromAttacking / 3;
+            return 0;
         }
 
         public override int[] buildPositiveTags()

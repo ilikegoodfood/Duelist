@@ -93,11 +93,6 @@ namespace Duelist
 
         public override void createAgent(Location target)
         {
-            if (target.map.overmind.god is God_Eternity brokenMaker)
-            {
-                brokenMaker.agentBuffer.Add(this);
-            }
-
             UAE_Duelist duelist = null;
 
             if (target.soc is Society society)

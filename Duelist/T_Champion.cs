@@ -20,7 +20,7 @@ namespace Duelist
 
         public override string getDesc()
         {
-            return "As a renowned champion, you may stand in for others in combat. When in the same location as a heroe who is on their way to attack another agent, you may choose to act as the champion for their target. This lowers their target's profile and menace (not below minimum). Whether the target appreciates your actions, is another matter entirely.";
+            return "As a renowned champion, you may stand in for others in combat. When in the same location as a hero who is on their way to attack another agent, you may choose to act as the champion for their target. This lowers their target's profile and menace (not below minimum). Whether the target appreciates your actions, is another matter entirely.";
         }
 
         public override void onAcquire(Person person)

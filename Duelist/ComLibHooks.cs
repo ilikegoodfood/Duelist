@@ -29,9 +29,11 @@ namespace Duelist
 
         public override BattleAgents onAgentBattleStarts(UA att, UA def)
         {
+            //Console.WriteLine("Duelist: Agent Battle Started");
             Tuple<UA, UA> pair = new Tuple<UA, UA>(att, def);
             if (ModCore.Get().pendingDuels.Contains(pair))
             {
+                //Console.WriteLine("Duelist: Pending Duel Started");
                 ModCore.Get().pendingDuels.Remove(pair);
                 return new BattleAgents_Duel(att, def);
             }
@@ -41,6 +43,7 @@ namespace Duelist
                 T_HonourableDuel duel = (T_HonourableDuel)def.person.traits.FirstOrDefault(t => t is T_HonourableDuel);
                 if (duel != null && duel.cooldown <= 0)
                 {
+                    //Console.WriteLine("Duelist: Duel Started");
                     duel.use();
                     return new BattleAgents_Duel(att, def);
                 }
@@ -51,8 +54,10 @@ namespace Duelist
 
         public override bool interceptAgentBattleAutomatic(BattleAgents battle)
         {
+            //Console.WriteLine("Duelist: Automatic Battle Intercepted");
             if (battle is BattleAgents_Duel duel)
             {
+                //Console.WriteLine("Duelist: Custom Battle Type detected Intercepted");
                 duel.automatic();
                 return true;
             }
@@ -62,7 +67,7 @@ namespace Duelist
 
         public override void onAgentBattle_Setup(BattleAgents battle)
         {
-            //Console.WriteLine("Duelist: Battle setup hook called");
+            //Console.WriteLine("Duelist: Battle setup underway");
             if (battle is BattleAgents_Duel duel)
             {
                 //Console.WriteLine("Duelist: Battle is Duel");

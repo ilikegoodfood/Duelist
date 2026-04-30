@@ -109,7 +109,10 @@ namespace Duelist
 
         public override void afterMapGenAfterHistorical(Map map)
         {
-            map.overmind.agentsGeneric.Add(new UAE_Abstraction_Duelist(map));
+            if (!map.tutorial)
+            {
+                map.overmind.agentsGeneric.Add(new UAE_Abstraction_Duelist(map));
+            }
         }
 
         public override void onTurnEnd(Map map)

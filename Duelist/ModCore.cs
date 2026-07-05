@@ -3,9 +3,6 @@ using Assets.Code.Modding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Duelist
 {
@@ -14,6 +11,8 @@ namespace Duelist
         private static ModCore modCore;
 
         private static CommunityLib.ModCore comLib;
+
+        private ComLibHooks comLibHooks;
 
         private Dictionary<UA, Ch_ChallengeToDuel> duelChallenges;
 
@@ -101,7 +100,7 @@ namespace Duelist
                 {
                     comLib = core;
 
-                    comLib.RegisterHooks(new ComLibHooks(map));
+                    comLibHooks = new ComLibHooks(map, core.HookRegistry);
                     break;
                 }
             }

@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 
 namespace Duelist
 {
-    public class ComLibHooks : CommunityLib.Hooks
+    public class ComLibHooks
     {
-        public ComLibHooks(Map map)
-            : base(map)
+        public ComLibHooks(Map map, CommunityLib.HooksDelegateRegistry registry)
         {
-
+            registry.RegisterHook_onMoveTaken(onMoveTaken);
+            registry.RegisterHook_onAgentBattleStarts(onAgentBattleStarts);
+            registry.RegisterHook_onAgentBattle_Setup(onAgentBattle_Setup);
+            registry.RegisterHook_interceptAgentBattleStep(interceptAgentBattleStep);
+            registry.RegisterHook_onPopupBattleAgent_Populate(onPopupBattleAgent_Populate);
+            registry.RegisterHook_onAgentAI_EndOfProcess(onAgentAI_EndOfProcess);
         }
 
-        public override void onMoveTaken(Unit u, Location locA, Location locB)
+        public void onMoveTaken(Unit u, Location locA, Location locB)
         {
             foreach (T_Champion champion in ModCore.Get().champions)
             {
@@ -27,7 +28,7 @@ namespace Duelist
             }
         }
 
-        public override BattleAgents onAgentBattleStarts(UA att, UA def)
+        public BattleAgents onAgentBattleStarts(UA att, UA def)
         {
             //Console.WriteLine("Duelist: Agent Battle Started");
             Tuple<UA, UA> pair = new Tuple<UA, UA>(att, def);
@@ -52,20 +53,7 @@ namespace Duelist
             return null;
         }
 
-        public override bool interceptAgentBattleAutomatic(BattleAgents battle)
-        {
-            //Console.WriteLine("Duelist: Automatic Battle Intercepted");
-            if (battle is BattleAgents_Duel duel)
-            {
-                //Console.WriteLine("Duelist: Custom Battle Type detected Intercepted");
-                duel.automatic();
-                return true;
-            }
-
-            return false;
-        }
-
-        public override void onAgentBattle_Setup(BattleAgents battle)
+        public void onAgentBattle_Setup(BattleAgents battle)
         {
             //Console.WriteLine("Duelist: Battle setup underway");
             if (battle is BattleAgents_Duel duel)
@@ -75,7 +63,7 @@ namespace Duelist
             }
         }
 
-        public override bool interceptAgentBattleStep(PopupBattleAgent popupBattle, BattleAgents battle, out bool battleOver)
+        public bool interceptAgentBattleStep(PopupBattleAgent popupBattle, BattleAgents battle, out bool battleOver)
         {
             //Console.WriteLine("Duelist: Battle intercept step hook called");
             if (battle is BattleAgents_Duel duel)
@@ -89,7 +77,7 @@ namespace Duelist
             return false;
         }
 
-        public override void onPopupBattleAgent_Populate(PopupBattleAgent popupBattle, BattleAgents battle)
+        public void onPopupBattleAgent_Populate(PopupBattleAgent popupBattle, BattleAgents battle)
         {
             //Console.WriteLine("Duelist: Popup Battle populate hook called");
             if (battle is BattleAgents_Duel duel)
@@ -99,7 +87,7 @@ namespace Duelist
             }
         }
 
-        public override void onAgentAI_EndOfProcess(UA ua, CommunityLib.AgentAI.AIData aiData, List<CommunityLib.AgentAI.ChallengeData> validChallengeData, List<CommunityLib.AgentAI.TaskData> validTaskData, List<Unit> visibleUnits)
+        public void onAgentAI_EndOfProcess(UA ua, CommunityLib.AgentAI.AIData aiData, List<CommunityLib.AgentAI.ChallengeData> validChallengeData, List<CommunityLib.AgentAI.TaskData> validTaskData, List<Unit> visibleUnits)
         {
             if (ua.task is Task_PerformChallenge tChallenge && tChallenge.challenge is Rt_ChampionDuel duel)
             {
